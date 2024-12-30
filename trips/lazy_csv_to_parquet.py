@@ -1,9 +1,10 @@
-import polars as pl
-import os
-import pathlib
-from polars.datatypes import Int64, Float64, String
-from polars import Schema
 import logging
+import pathlib
+
+import polars as pl
+from polars import Schema
+from polars.datatypes import Float64, Int64, String
+
 from utils import timeit
 
 ROOT_DIR_PATH = pathlib.Path(__file__).resolve().parent.parent
@@ -38,7 +39,6 @@ schema = Schema(
         "total_amount": Float64,
     }
 )
-
 
 
 @timeit
@@ -86,7 +86,6 @@ def main():
             ]
         )
     )
-
 
     # Sink to Parquet with optimized settings
     data.sink_parquet(
