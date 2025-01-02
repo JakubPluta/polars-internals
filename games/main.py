@@ -139,9 +139,20 @@ schema = Schema(
 
 
 @profile
+def simple_pipeline():
+    data: pl.LazyFrame = pl.scan_ndjson(
+        FAKE_GAMING_DATA_DIR / "data.json",
+        schema=schema,
+        batch_size=5,
+    )
+    # polars.exceptions.InvalidOperationError: sink_Parquet: Parquet does not support nested columns
+    data.sink_parquet(FAKE_GAMING_DATA_DIR / "simple_pipeline.parquet")
+
+
+@profile
 def main():
     # Read Lazy JSON data
-    pl.Config.set_streaming_chunk_size(5)
+    pl.Config.set_streaming_chunk_size(1000)
     data: pl.LazyFrame = pl.scan_ndjson(
         FAKE_GAMING_DATA_DIR / "data.json",
         schema=schema,
@@ -223,4 +234,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    simple_pipeline()

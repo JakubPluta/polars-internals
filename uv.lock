@@ -1589,6 +1589,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "notebook" },
+    { name = "numpy" },
     { name = "polars", extra = ["all"] },
 ]
 
@@ -1601,6 +1602,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "notebook", specifier = ">=7.3.2" },
+    { name = "numpy", specifier = ">=2.2.1" },
     { name = "polars", extras = ["all"], specifier = ">=1.18.0" },
 ]
 
