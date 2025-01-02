@@ -5,10 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "notebook>=7.3.2",
     "polars[all]>=1.18.0",
 ]
 
 [dependency-groups]
 dev = [
     "faker>=33.1.0",
+    "memory-profiler>=0.61.0",
 ]
