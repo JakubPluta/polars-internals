@@ -2,6 +2,7 @@ import logging
 import pathlib
 
 import polars as pl
+from memory_profiler import profile
 from polars import Schema
 from polars.datatypes import Float64, Int64, String
 
@@ -9,7 +10,7 @@ from utils import timeit
 
 ROOT_DIR_PATH = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR_PATH = ROOT_DIR_PATH / "data"
-NYC_YELLOW_TAXI_DIR = DATA_DIR_PATH / "nycyellotaxi"
+NYC_YELLOW_TAXI_DIR = DATA_DIR_PATH / "nycyellowtaxi"
 
 
 log = logging.getLogger(__name__)
@@ -42,8 +43,10 @@ schema = Schema(
 
 
 @timeit
+@profile
 def main():
     log.info("Starting data processing...")
+
     # Lazy read, process, and save data
     data = (
         pl.scan_csv(NYC_YELLOW_TAXI_DIR / "*.csv", schema=schema, has_header=True)
@@ -99,4 +102,13 @@ def main():
 
 
 if __name__ == "__main__":
+    """Reading NYC Yellow Taxi data, processing it, and saving it as Parquet.
+    
+    Input Data Size: ~8GB - 4 CSV Files, 19 Columns, 47_248_845 Rows
+    Output Data Size: ~0.35GB - 1 Parquet File, 17 Columns, 8_334_411 Rows 
+    
+    Processing time:
+        Time: 7.8 seconds
+        Maximum memory used: 540gb
+    """
     main()
