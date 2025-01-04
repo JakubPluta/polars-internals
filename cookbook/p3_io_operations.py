@@ -206,7 +206,41 @@ print(df.head())
 df = pl.scan_iceberg(
     str(
         COOKBOOK_DATA_DIR
-        / "my_iceberg_catalog/demo.db/my_table/metadata/00001-7ad1e6e8-7a0d-4455-ac6d-bcca5a45b494.metadata.json"
+        / "my_iceberg_catalog/demo.db/my_table/metadata/00000-2bc902a2-e0f2-426f-81a2-53941ec37715.metadata.json"
     )
 )
 print(df.collect(streaming=True).head())
+
+
+# sink to iceberg
+df = pl.scan_ipc(
+    COOKBOOK_DATA_DIR / "tmp/customer_shopping_data.arrow",
+)
+# not yet supported in standard engine
+try:
+    df.sink_ipc(str(COOKBOOK_DATA_DIR / "tmp/customer_shopping_data2.arrow"))
+except pl.exceptions.InvalidOperationError as e:
+    print("Scan IPC -> Sink IPC is not supported yet {}".format(e))
+
+# but you can read csv lazily and sink to ipc
+pl.scan_csv(COOKBOOK_DATA_DIR / "customer_shopping_data.csv", has_header=True).sink_ipc(
+    COOKBOOK_DATA_DIR / "tmp/customer_shopping_data2.arrow"
+)
+
+
+df = pl.read_csv(COOKBOOK_DATA_DIR / "customer_shopping_data.csv", has_header=True)
+dfs = df.group_by(pl.col("gender"))
+for name, df in dfs:
+    name_part, *_ = name
+    df.write_csv(COOKBOOK_DATA_DIR / f"tmp/letter_{name}.csv")
+
+# Collect multiple LazyFrames at the same time.
+# This runs all the computation graphs in parallel on the Polars threadpool.
+import glob
+
+lfs = [
+    pl.scan_csv(file) for file in glob.glob(str(COOKBOOK_DATA_DIR / "tmp/letter_*.csv"))
+]
+dfs = pl.collect_all(lfs)  # collect all - returns list of DataFrames
+for df in dfs:
+    print(df.head())
