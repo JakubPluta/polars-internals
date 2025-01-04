@@ -17,4 +17,9 @@ clean:
 
 
 nyc: download-nyc unzip-nyc clean
-	
+
+
+format:
+	@echo "Formatting Python code"
+	@black . --extend-exclude "notebooks" | ruff format . --exclude="**/*.ipynb"
+

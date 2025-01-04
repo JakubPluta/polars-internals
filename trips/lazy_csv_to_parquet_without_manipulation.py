@@ -63,10 +63,10 @@ def main():
 
 if __name__ == "__main__":
     """Reading NYC Yellow Taxi data, processing it, and saving it as Parquet.
-    
+
     Input Data Size: ~8GB - 4 CSV Files, 19 Columns, 47_248_845 Rows
-    Output Data Size: ~1.76GB - 1 Parquet File, 19 Columns, 47_248_845 Rows 
-    
+    Output Data Size: ~1.76GB - 1 Parquet File, 19 Columns, 47_248_845 Rows
+
     Processing time:
         Time: 12 seconds
         Maximum memory used: 1235 MiB
