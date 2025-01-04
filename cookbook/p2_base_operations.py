@@ -189,6 +189,6 @@ total_by_payment = (
         pl.col("trip_distance").mean().alias("avg_distance_by_payment"),
     )
     .sort(by="avg_distance_by_payment", descending=True)
-    .collect(streaming=True) # make it streaming, so it will fit into ram.
+    .collect(streaming=True)  # make it streaming, so it will fit into ram.
 )
 print(total_by_payment)

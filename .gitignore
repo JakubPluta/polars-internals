@@ -164,3 +164,5 @@ cython_debug/
 # allow the cookbook directory
 !/data/cookbook
 .DS_Store
+
+/data/cookbook/data/tmp/*
