@@ -24,5 +24,9 @@ format:
 	@black . --extend-exclude "notebooks" | ruff format . --exclude="**/*.ipynb"
 
 up:
-	@echo "Starting Minio"
+	@echo "Starting Minio and Postgres"
 	docker compose up -d
+
+down:
+	@echo "Stopping Minio and Postgres"
+	docker compose down
