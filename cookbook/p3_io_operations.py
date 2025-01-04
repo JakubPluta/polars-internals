@@ -109,10 +109,8 @@ print(df.collect(streaming=True).head())
 
 partitioned_path = str(COOKBOOK_DATA_DIR / "tmp/venture_funding_deals_delta")
 df.collect(streaming=True).write_delta(
-
     partitioned_path, mode="overwrite", delta_write_options={"partition_by": "Industry"}
 )
-
 
 print(pl.read_delta(partitioned_path).head())
 
@@ -120,10 +118,95 @@ print(pl.read_delta(partitioned_path).head())
 df = pl.read_delta(
     partitioned_path,
     use_pyarrow=True,
-    pyarrow_options={'partitions': [('Industry', '=', 'Accounting')]},
+    pyarrow_options={"partitions": [("Industry", "=", "Accounting")]},
+)
+print(df.head())
 
+# reading from AWS (Minio Here)
+s3_path = "s3://polars-datasets/venture_funding_deals.parquet"
+storage_options = {
+    "aws_access_key_id": "minioadmin",
+    "aws_secret_access_key": "minioadmin",
+    "endpoint_url": "http://localhost:9000",
+}
+
+df = pl.read_parquet(s3_path, storage_options=storage_options)
+print(df.head())
+
+# writing to AWS (Minio Here)
+output_path = "s3://polars-datasets/abc"
+storage_options = {
+    "aws_access_key_id": "minioadmin",
+    "aws_secret_access_key": "minioadmin",
+    "endpoint_url": "http://localhost:9000",
+}
+import pyarrow.fs
+
+# If you want to write partitioned data by using arrow
+# for s3 compatible storage you need to provide filesystem
+pyfs = pyarrow.fs.S3FileSystem(
+    endpoint_override="http://localhost:9000",
+    access_key="minioadmin",
+    secret_key="minioadmin",
+)
+df.write_parquet(
+    "polars-datasets/partitioned",  # if you use arrow, you need to provide a path without s3:// prefix
+    storage_options=storage_options,
+    use_pyarrow=True,
+    pyarrow_options={
+        "partition_cols": ["Industry"],
+        "filesystem": pyfs,  # if you want to write partitioned data
+        "existing_data_behavior": "overwrite_or_ignore",
+    },
+)
+
+
+# reading json
+
+
+df = pl.read_json(COOKBOOK_DATA_DIR / "world_population.json")
+print(df.head())
+df.write_json(COOKBOOK_DATA_DIR / "tmp/world_population.json")
+
+# reading ndjson lazily
+df = pl.scan_ndjson(COOKBOOK_DATA_DIR / "world_population.jsonl")
+print(df.collect(streaming=True).head())
+df.collect(streaming=True).write_json(
+    COOKBOOK_DATA_DIR / "tmp/world_population.jsonl",
+)
+
+
+# reading csv and writing as arrow
+
+df = pl.read_csv(COOKBOOK_DATA_DIR / "customer_shopping_data.csv", has_header=True)
+df.write_ipc(
+    COOKBOOK_DATA_DIR / "tmp/customer_shopping_data.arrow",
+    compression="lz4",
+)
+
+df = pl.read_ipc(
+    COOKBOOK_DATA_DIR / "tmp/customer_shopping_data.arrow", memory_map=False
 )
 print(df.head())
 
 
-# reading from AWS
+# avro
+
+avro_file_path = COOKBOOK_DATA_DIR / "tmp" / "world_population.avro"
+df = pl.read_json(COOKBOOK_DATA_DIR / "world_population.json").select(
+    ["country", "pop2023", "density"]
+)
+df.write_avro(avro_file_path)
+
+df = pl.read_avro(avro_file_path)
+print(df.head())
+
+
+#  iceberg
+df = pl.scan_iceberg(
+    str(
+        COOKBOOK_DATA_DIR
+        / "my_iceberg_catalog/demo.db/my_table/metadata/00001-7ad1e6e8-7a0d-4455-ac6d-bcca5a45b494.metadata.json"
+    )
+)
+print(df.collect(streaming=True).head())

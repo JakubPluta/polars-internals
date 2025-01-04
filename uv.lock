@@ -1633,6 +1633,7 @@ dependencies = [
     { name = "notebook" },
     { name = "numpy" },
     { name = "polars", extra = ["all"] },
+    { name = "pyarrow" },
 ]
 
 [package.dev-dependencies]
@@ -1648,6 +1649,7 @@ requires-dist = [
     { name = "notebook", specifier = ">=7.3.2" },
     { name = "numpy", specifier = ">=2.2.1" },
     { name = "polars", extras = ["all"], specifier = ">=1.18.0" },
+    { name = "pyarrow", specifier = ">=18.1.0" },
 ]
 
 [package.metadata.requires-dev]

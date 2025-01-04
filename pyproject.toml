@@ -8,6 +8,7 @@ dependencies = [
     "notebook>=7.3.2",
     "numpy>=2.2.1",
     "polars[all]>=1.18.0",
+    "pyarrow>=18.1.0",
 ]
 
 [dependency-groups]

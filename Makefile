@@ -23,3 +23,6 @@ format:
 	@echo "Formatting Python code"
 	@black . --extend-exclude "notebooks" | ruff format . --exclude="**/*.ipynb"
 
+minio:
+	@echo "Starting Minio"
+	docker compose up -d
