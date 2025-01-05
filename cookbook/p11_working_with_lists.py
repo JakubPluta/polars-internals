@@ -176,3 +176,47 @@ print(
 aggregated_df = df.group_by("trending_date").agg("views", "channel_title")
 
 print(aggregated_df.head())
+
+
+# eval -> Run any polars expression against the lists’ elements.
+channel_titles_df = aggregated_df.select(
+    pl.col("channel_title").list.head(2),  # get first 2 channel titles
+    pl.col("channel_title")
+    .list.eval(pl.element().str.to_uppercase())  # convert to uppercase using eval
+    .list.head(2)  # get first 2
+    .alias("channel_title_upper"),  # alias
+)
+print(channel_titles_df)
+
+
+print(
+    (
+        channel_titles_df.with_columns(
+            pl.col("channel_title_upper").list.eval(
+                pl.element().filter(pl.element().str.contains("A", literal=True))
+            )
+        )
+    ).head()
+)
+
+
+views_rank_df = aggregated_df.select(
+    "trending_date",
+    "views",
+    pl.col("views")
+    .list.eval(pl.element().rank("dense", descending=True))
+    .alias("views_rank"),
+)
+print(views_rank_df.head())
+
+
+print(views_rank_df.explode("views", "views_rank").filter(pl.col("views_rank") <= 3))
+
+
+top3_views_df = (
+    views_rank_df.explode("views", "views_rank")  # explode list of views into rows
+    .filter(pl.col("views_rank") <= 3)  # filter top 3
+    .group_by("trending_date")  # group it now by date
+    .agg(pl.all())  # aggregate all columns, it will convert rows into lists
+)
+print(top3_views_df.head())
