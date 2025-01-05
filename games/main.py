@@ -5,7 +5,14 @@ import pathlib
 import polars as pl
 from memory_profiler import profile
 from polars import Schema
-from polars.datatypes import Boolean, Float64, Int64, List, String, Struct
+from polars.datatypes import (
+    Boolean,
+    Float64,
+    Int64,
+    List,
+    String,
+    Struct,
+)
 
 ROOT_DIR_PATH = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR_PATH = ROOT_DIR_PATH / "data"
@@ -201,7 +208,12 @@ def main():
             )
         )
         .group_by(
-            ["team_id", "team_created_date", "team_ranking", "team_total_winnings"]
+            [
+                "team_id",
+                "team_created_date",
+                "team_ranking",
+                "team_total_winnings",
+            ]
         )
         .agg(
             [

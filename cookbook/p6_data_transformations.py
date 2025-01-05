@@ -190,7 +190,9 @@ print(
 
 str_cols = ["Name", "Type 1", "Type 2"]
 str_combined = pl.fold(
-    acc=pl.lit(""), function=lambda acc, col: acc + col, exprs=str_cols
+    acc=pl.lit(""),
+    function=lambda acc, col: acc + col,
+    exprs=str_cols,
 ).alias("Combined Types")
 print(df.select([*str_cols, str_combined]))
 

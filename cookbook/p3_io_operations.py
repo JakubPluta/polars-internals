@@ -51,7 +51,12 @@ df.sink_csv(COOKBOOK_DATA_DIR / "tmp/customer_shopping_data.csv")
 
 df = pl.read_parquet(
     COOKBOOK_DATA_DIR / "venture_funding_deals.parquet",
-    columns=["Company", "Amount", "Valuation", "Industry"],  # Columns to select
+    columns=[
+        "Company",
+        "Amount",
+        "Valuation",
+        "Industry",
+    ],  # Columns to select
     row_index_name="row_cnt",
 )
 print(df)
@@ -83,7 +88,8 @@ print(df.head())
 # scan parquet, materialize with streaming and store partitioned parquet
 (
     pl.scan_parquet(
-        COOKBOOK_DATA_DIR / "venture_funding_deals_partitioned", hive_partitioning=True
+        COOKBOOK_DATA_DIR / "venture_funding_deals_partitioned",
+        hive_partitioning=True,
     )
     .collect(streaming=True)
     .write_parquet(
@@ -109,7 +115,9 @@ print(df.collect(streaming=True).head())
 
 partitioned_path = str(COOKBOOK_DATA_DIR / "tmp/venture_funding_deals_delta")
 df.collect(streaming=True).write_delta(
-    partitioned_path, mode="overwrite", delta_write_options={"partition_by": "Industry"}
+    partitioned_path,
+    mode="overwrite",
+    delta_write_options={"partition_by": "Industry"},
 )
 
 print(pl.read_delta(partitioned_path).head())
@@ -185,7 +193,8 @@ df.write_ipc(
 )
 
 df = pl.read_ipc(
-    COOKBOOK_DATA_DIR / "tmp/customer_shopping_data.arrow", memory_map=False
+    COOKBOOK_DATA_DIR / "tmp/customer_shopping_data.arrow",
+    memory_map=False,
 )
 print(df.head())
 

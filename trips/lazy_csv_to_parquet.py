@@ -49,7 +49,11 @@ def main():
 
     # Lazy read, process, and save data
     data = (
-        pl.scan_csv(NYC_YELLOW_TAXI_DIR / "*.csv", schema=schema, has_header=True)
+        pl.scan_csv(
+            NYC_YELLOW_TAXI_DIR / "*.csv",
+            schema=schema,
+            has_header=True,
+        )
         .with_columns(
             [
                 pl.col("tpep_pickup_datetime").str.strptime(

@@ -84,7 +84,8 @@ print(
 # first word
 print(
     df.select(
-        "content", pl.col("content").str.extract(r"([A-Za-z]+)").alias("extract")
+        "content",
+        pl.col("content").str.extract(r"([A-Za-z]+)").alias("extract"),
     ).head(5)
 )
 print(
@@ -128,7 +129,11 @@ print(
     df.select(
         pl.all(),
         pl.concat_str(
-            pl.lit(100) + 3, pl.lit(" "), pl.col("colA"), pl.col("colB"), separator="::"
+            pl.lit(100) + 3,
+            pl.lit(" "),
+            pl.col("colA"),
+            pl.col("colB"),
+            separator="::",
         ).alias("newCol"),
     )
 )

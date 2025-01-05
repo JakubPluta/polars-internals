@@ -6,7 +6,11 @@ from polars import Schema
 # Creating Lazy DataFrame
 
 df = pl.LazyFrame(
-    {"a": [1, 2, 3, 4, 5], "b": [5, 4, 3, 2, 1], "c": ["a", "b", "c", "d", "e"]}
+    {
+        "a": [1, 2, 3, 4, 5],
+        "b": [5, 4, 3, 2, 1],
+        "c": ["a", "b", "c", "d", "e"],
+    }
 )
 print(type(df))
 print(df)  # print lazy frame plan
@@ -119,7 +123,15 @@ print(worse_approach.explain(optimized=False))
 print(worse_approach.limit(5).collect())
 
 # bad example of not chaining operations
-columns = ["Name", "Sex", "Age", "Fare", "Cabin", "Pclass", "Survived"]
+columns = [
+    "Name",
+    "Sex",
+    "Age",
+    "Fare",
+    "Cabin",
+    "Pclass",
+    "Survived",
+]
 df1 = df.select(pl.col(columns))
 df1 = df1.filter(pl.col("Age") >= 32)
 df1 = df1.sort(by=["Age", "Name"], descending=True)
@@ -165,7 +177,9 @@ schema = Schema(
 # batch.
 # pl.Config.set_streaming_chunk_size(1000)  # set chunk size for streaming
 df = pl.scan_csv(
-    NYC_YELLOW_TAXI_DIR / "yellow_tripdata_2016-03.csv", has_header=True, schema=schema
+    NYC_YELLOW_TAXI_DIR / "yellow_tripdata_2016-03.csv",
+    has_header=True,
+    schema=schema,
 ).collect(streaming=True)
 print(df.head(5))
 

@@ -37,7 +37,10 @@ df = pl.read_csv(
 
 
 df.write_database(
-    "dev.customer_shopping_data", uri, engine="adbc", if_table_exists="replace"
+    "dev.customer_shopping_data",
+    uri,
+    engine="adbc",
+    if_table_exists="replace",
 )
 
 

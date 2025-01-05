@@ -4,7 +4,11 @@ import polars as pl
 # Creating Polars DataFrame
 
 df = pl.DataFrame(
-    {"a": [1, 2, 3, 4, 5], "b": [5, 4, 3, 2, 1], "c": ["a", "b", "c", "d", "e"]}
+    {
+        "a": [1, 2, 3, 4, 5],
+        "b": [5, 4, 3, 2, 1],
+        "c": ["a", "b", "c", "d", "e"],
+    }
 )
 print(df.head())  # print first 5 rows
 print(df.schema)  # print schema
@@ -17,14 +21,21 @@ print(df.shape, df.height, df.width)  # print shape
 arr = np.random.rand(10, 4)
 df = pl.DataFrame(
     arr,
-    schema={"a": pl.Float64, "b": pl.Float64, "c": pl.Float64, "d": pl.Float64},
+    schema={
+        "a": pl.Float64,
+        "b": pl.Float64,
+        "c": pl.Float64,
+        "d": pl.Float64,
+    },
     orient="row",
 )
 print(df.head())
 
 arr2 = np.array([(1, 2.0), (3, 4.0), (5, 6.0)])
 df = pl.DataFrame(
-    arr2, schema={"a": pl.Int8, "b": pl.Int16, "c": pl.Int32}, orient="col"
+    arr2,
+    schema={"a": pl.Int8, "b": pl.Int16, "c": pl.Int32},
+    orient="col",
 )
 print(df.head())
 

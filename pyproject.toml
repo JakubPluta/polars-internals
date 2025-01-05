@@ -25,3 +25,5 @@ dev = [
 docstring-code-format = true
 docstring-code-line-length = 20
 
+[tool.ruff]
+line-length = 79

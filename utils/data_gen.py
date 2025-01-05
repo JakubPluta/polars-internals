@@ -71,10 +71,21 @@ def generate_match():
                 {
                     "item_id": str(uuid.uuid4()),
                     "name": random.choice(
-                        ["Rare Sword", "Epic Shield", "Legendary Armor", "Mythic Ring"]
+                        [
+                            "Rare Sword",
+                            "Epic Shield",
+                            "Legendary Armor",
+                            "Mythic Ring",
+                        ]
                     ),
                     "rarity": random.choice(
-                        ["Common", "Rare", "Epic", "Legendary", "Mythic"]
+                        [
+                            "Common",
+                            "Rare",
+                            "Epic",
+                            "Legendary",
+                            "Mythic",
+                        ]
                     ),
                     "value": random.randint(100, 10000),
                 }
