@@ -87,14 +87,14 @@ print(
 print(
     (
         df.select(
-            pl.struct( # create struct as combination of channelGrouping and trafficSource.source
+            pl.struct(  # create struct as combination of channelGrouping and trafficSource.source
                 pl.col("channelGrouping"),
                 pl.col("trafficSource").struct.field("source"),
             )
-            .unique() # take unique values
+            .unique()  # take unique values
             .alias("channelAndSource")
         )
-        .unnest("channelAndSource") # unnest into separate columns
+        .unnest("channelAndSource")  # unnest into separate columns
         .sort("channelGrouping", "source")
     )
 )
