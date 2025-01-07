@@ -152,7 +152,7 @@ def simple_pipeline():
         schema=schema,
         batch_size=5,
     )
-    # polars.exceptions.InvalidOperationError: sink_Parquet: Parquet does not support nested columns
+    # polars.exceptions.InvalidOperationError: sink_Parquet: Seems like ndjson -> parquet in lazy way is not supported
     data.sink_parquet(FAKE_GAMING_DATA_DIR / "simple_pipeline.parquet")
 
 

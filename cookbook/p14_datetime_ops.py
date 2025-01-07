@@ -229,13 +229,9 @@ df = pl.scan_csv(
 print(df.collect(streaming=True).head())
 time_col, entity_col, value_col = df.collect_schema().names()
 
-ydf = (
-    df.group_by_dynamic(
-        time_col,
-        every="1mo",
-        group_by=entity_col,
-    )
-    .agg((pl.col(value_col).mean() - 273.15).alias(value_col))
-)
+ydf = df.group_by_dynamic(
+    time_col,
+    every="1mo",
+    group_by=entity_col,
+).agg((pl.col(value_col).mean() - 273.15).alias(value_col))
 print(ydf.group_by(entity_col).head(3).collect(streaming=True))
-
