@@ -113,6 +113,6 @@ if __name__ == "__main__":
 
     Processing time:
         Time: 7.8 seconds
-        Maximum memory used: 540gb
+        Maximum memory used: 540mb
     """
     main()

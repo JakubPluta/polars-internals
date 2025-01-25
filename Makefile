@@ -30,3 +30,11 @@ up:
 down:
 	@echo "Stopping Minio and Postgres"
 	docker compose down
+
+jn:
+	@echo "Starting Jupyter Notebook"
+	@jupyter notebook
+
+gen-fake-data:
+	@echo "Generating fake data"
+	python utils/data_gen.py

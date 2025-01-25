@@ -185,8 +185,8 @@ def generate_large_dataset_ndjson(output_file, target_size_gb=1):
 
     with open(output_file, "w") as f:
         while current_size < target_bytes:
-            data = generate_team()  # używamy istniejącej funkcji generate_team()
-            json_line = json.dumps(data) + "\n"  # dodajemy znak nowej linii
+            data = generate_team()
+            json_line = json.dumps(data) + "\n"
             f.write(json_line)
 
             current_size = f.tell()
